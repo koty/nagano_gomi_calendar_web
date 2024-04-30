@@ -69,7 +69,7 @@ export default function Home() {
   }
   return (
     <main>
-      <Select onChange={onSelectedChange} value={selectedAreaNo}>
+      <Select onChange={onSelectedChange} value={selectedAreaNo} placeholder='タップして地区を選択してください'>
         {Object.keys(areaResult.data).map((key) => {
           return (<option value={key} key={key}>{areaResult.data[key]}</option>)
         })}
