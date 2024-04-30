@@ -1,7 +1,7 @@
 'use client'
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Select, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { ChangeEvent, useEffect, useState } from "react"
 
 interface Item {
@@ -56,7 +56,17 @@ export default function Home() {
     }).format(d)
     return `${formatedDate}(${weeks[d.getDay()]})`
   }
-
+  const tag = (kind: string) => {
+    let colorScheme = 'gray'
+    if (kind.includes('可燃')) {
+      colorScheme = 'green'
+    } else if (kind.includes('プラ')) {
+      colorScheme = 'yellow'
+    } else if (kind.includes('不燃')) {
+      colorScheme = 'red'
+    }
+    return (<Tag size='md' variant='outline' colorScheme={colorScheme} sx={{'marginRight': '1em'}}>{kind}</Tag>)
+  }
   return (
     <main>
       <Select onChange={onSelectedChange} value={selectedAreaNo}>
@@ -80,7 +90,7 @@ export default function Home() {
                   {calendarGroupByDate[d]?.some(c => c.not_available) ? `❌ ${formatDate(d)}` : formatDate(d)}
                 </Td>
                 <Td>
-                  {calendarGroupByDate[d]?.map(c => c.kind).join("、")}
+                  {calendarGroupByDate[d]?.map(c => tag(c.kind))}
                 </Td>
                 </Tr>
               )
