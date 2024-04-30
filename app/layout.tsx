@@ -12,8 +12,13 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="ja">
+      <head>
+        <title>長野市ごみ収集非公式カレンダー</title>
+        <meta name="description" content="長野市ごみ収集非公式カレンダーです。" />
+      </head>
+
+      <body>
         <Providers>
           {children}
         </Providers>
