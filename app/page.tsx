@@ -37,7 +37,7 @@ export default function Home() {
       return -1;
     }
   }) : []
-  const today = Intl.DateTimeFormat(undefined, {
+  const today = Intl.DateTimeFormat('ja-JP', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'}).format(new Date()).replaceAll('/', '-')
@@ -50,7 +50,7 @@ export default function Home() {
   const formatDate = (s: string) => {
     const weeks = ["日", "月", "火", "水", "木", "金", "土"];
     const d = new Date(s)
-    const formatedDate = Intl.DateTimeFormat(undefined, {
+    const formatedDate = Intl.DateTimeFormat('ja-JP', {
       month: '2-digit',
       day: '2-digit'
     }).format(d)
