@@ -1,9 +1,9 @@
 export const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
+    let worker;
     try {
-      const worker = await navigator.serviceWorker.register('/serviceWorker.js')
+      worker = await navigator.serviceWorker.register('/serviceWorker.js')
       console.log('Service Worker registered successfully')
-      return worker
     } catch (error) {
       console.log('Service Worker registration failed:', error)
     }
@@ -16,5 +16,6 @@ export const registerServiceWorker = async () => {
     } else {
       console.log('already granted!')      
     }
+    return worker
   }
 }
