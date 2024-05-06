@@ -14,10 +14,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
+        <link rel="manifest" href="/manifest.json" />
         <title>長野市ごみ収集非公式カレンダー</title>
         <meta name="description" content="長野市ごみ収集非公式カレンダーです。" />
       </head>
-
       <body>
         <Providers>
           {children}

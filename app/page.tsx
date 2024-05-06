@@ -1,8 +1,9 @@
 'use client'
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Button, Center, Flex, Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { ChangeEvent, useEffect, useState } from "react"
+import { registerServiceWorker } from './serviceWorkerRegistration'
 
 interface Item {
   date: string
@@ -16,7 +17,9 @@ export default function Home() {
     const defaultAreaNo = localStorage.getItem('defaultAreaNo') ?? "1"
     setSelectedAreaNo(defaultAreaNo)
   }, [])
-
+  const onNotificationPrefClicked = () => {
+    registerServiceWorker()
+  }
   // Queries
   const calendarResult = useQuery<{[key: string]: Array<Item>}>({
     initialData: {},
@@ -56,7 +59,7 @@ export default function Home() {
     }).format(d)
     return `${formatedDate}(${weeks[d.getDay()]})`
   }
-  const tag = (kind: string) => {
+  const tag = (kind: string, i: number) => {
     let colorScheme = 'gray'
     if (kind.includes('可燃')) {
       colorScheme = 'green'
@@ -65,15 +68,24 @@ export default function Home() {
     } else if (kind.includes('不燃')) {
       colorScheme = 'red'
     }
-    return (<Tag size='md' variant='outline' colorScheme={colorScheme} sx={{'marginRight': '1em'}}>{kind}</Tag>)
+    return (<Tag key={i} size='md' variant='outline' colorScheme={colorScheme} sx={{'marginRight': '1em'}}>{kind}</Tag>)
   }
   return (
     <main>
-      <Select onChange={onSelectedChange} value={selectedAreaNo} placeholder='タップして地区を選択してください'>
-        {Object.keys(areaResult.data).map((key) => {
-          return (<option value={key} key={key}>{areaResult.data[key]}</option>)
-        })}
-      </Select>
+      <Flex color='white'>
+        <Center flex='1'>
+          <Select onChange={onSelectedChange} value={selectedAreaNo} placeholder='タップして地区を選択してください'>
+            {Object.keys(areaResult.data).map((key) => {
+              return (<option value={key} key={key}>{areaResult.data[key]}</option>)
+            })}
+          </Select>
+        </Center>
+        <Center>
+          <Button onClick={() => onNotificationPrefClicked()}>
+            通知登録
+          </Button>
+        </Center>
+      </Flex>
       <TableContainer>
         <Table variant='simple'>
           <Thead>
@@ -83,19 +95,18 @@ export default function Home() {
             </Tr>
           </Thead>
           <Tbody>
-            
             {Object.keys(calendarGroupByDate).map((d) => {
-              return (<Tr key={d}>
-                <Td>
-                  {calendarGroupByDate[d]?.some(c => c.not_available) ? `❌ ${formatDate(d)}` : formatDate(d)}
-                </Td>
-                <Td>
-                  {calendarGroupByDate[d]?.map(c => tag(c.kind))}
-                </Td>
+              return (
+                <Tr key={d}>
+                  <Td>
+                    {calendarGroupByDate[d]?.some(c => c.not_available) ? `❌ ${formatDate(d)}` : formatDate(d)}
+                  </Td>
+                  <Td>
+                    {calendarGroupByDate[d]?.map((c, i) => tag(c.kind, i))}
+                  </Td>
                 </Tr>
               )
             })}
-            
           </Tbody>
         </Table>
       </TableContainer>
