@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Button, Center, Flex, Select, Table, TableContainer, Tag, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { ChangeEvent, useEffect, useState } from "react"
-import { registerServiceWorker } from './serviceWorkerRegistration'
+import { useRouter } from "next/navigation"
 
 interface Item {
   date: string
@@ -12,13 +12,14 @@ interface Item {
 }
 
 export default function Home() {
+  const router = useRouter()
   const [selectedAreaNo, setSelectedAreaNo] = useState<string>("1")
   useEffect(() => {
     const defaultAreaNo = localStorage.getItem('defaultAreaNo') ?? "1"
     setSelectedAreaNo(defaultAreaNo)
   }, [])
-  const onNotificationPrefClicked = () => {
-    registerServiceWorker()
+  const onPreferenceClicked = () => {
+    router.replace('/preference')
   }
   // Queries
   const calendarResult = useQuery<{[key: string]: Array<Item>}>({
@@ -72,7 +73,7 @@ export default function Home() {
   }
   return (
     <main>
-      <Flex color='white'>
+      <Flex>
         <Center flex='1'>
           <Select onChange={onSelectedChange} value={selectedAreaNo} placeholder='タップして地区を選択してください'>
             {Object.keys(areaResult.data).map((key) => {
@@ -81,8 +82,8 @@ export default function Home() {
           </Select>
         </Center>
         <Center>
-          <Button onClick={() => onNotificationPrefClicked()}>
-            通知登録
+          <Button onClick={() => onPreferenceClicked()}>
+            設定
           </Button>
         </Center>
       </Flex>

@@ -18,7 +18,7 @@ export default function RootLayout({
         <title>長野市ごみ収集非公式カレンダー</title>
         <meta name="description" content="長野市ごみ収集非公式カレンダーです。" />
       </head>
-      <body>
+      <body style={{'margin': '0.5em'}}>
         <Providers>
           {children}
         </Providers>
